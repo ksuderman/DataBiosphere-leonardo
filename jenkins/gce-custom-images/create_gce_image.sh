@@ -8,10 +8,18 @@ set -e -x
 # gsutil must have been installed.
 # A Daisy image must have been pulled; e.g. via `docker pull gcr.io/compute-image-tools/daisy:latest`
 
-# The date-time suffix is in the format yymmdd-hh-mm but it could be anything.
-OUTPUT_IMAGE_NAME="leo-custom-gce-image-200226-09-36"
+# The date-time suffix is in the format yymmdd-hh-mm but it could be anything
+OUTPUT_IMAGE_NAME="leo-custom-gce-gpu-image-200312-10-34"
 
-# The bucket that Daisy uses as scratch area to store source and log files.
+# The partial URL for the image that will be the base for the custom image
+#BASE_IMAGE_PARTIAL_URL="projects/debian-cloud/global/images/debian-9-stretch-v20200210"
+BASE_IMAGE_PARTIAL_URL="projects/deeplearning-platform-release/global/images/pytorch-latest-gpu-20200306"
+
+# The Daisy workflow file
+#WORKFLOW_FILE="leo_custom_gce_image.wf.json"
+WORKFLOW_FILE="leo_custom_gce_gpu_image.wf.json"
+
+# The bucket that Daisy uses as scratch area to store source and log files
 # It must exist or Daisy errors out.
 # If it doesn't exist, we create it prior to launching Daisy and
 # the Daisy workflow cleans up all but daisy.log at the end.
@@ -30,7 +38,7 @@ DAISY_IMAGE_TAG="latest"
 SOURCE_DIR="/Users/kyuksel/github/leonardo/jenkins/gce-custom-images"
 
 # Set this to "true" if you want to validate the workflow without actually executing it
-VALIDATE_WORKFLOW="true"
+VALIDATE_WORKFLOW="false"
 
 # Create the Daisy scratch bucket if it doesn't exist. The Daisy workflow will clean it up at the end.
 gsutil ls $DAISY_BUCKET_PATH || gsutil mb -b on -p $PROJECT -l $REGION $DAISY_BUCKET_PATH
@@ -46,15 +54,15 @@ docker run -it --rm -v "$SOURCE_DIR":/daisy_source_files \
   -project $PROJECT \
   -zone $ZONE \
   -gcs_path $DAISY_BUCKET_PATH \
-  -default_timeout 60m \
+  -default_timeout 45m \
   -oauth /daisy_source_files/application_default_credentials.json \
-  -var:base_image projects/debian-cloud/global/images/debian-9-stretch-v20200210 \
+  -var:base_image $BASE_IMAGE_PARTIAL_URL \
   -var:output_image "$OUTPUT_IMAGE_NAME" \
   -var:installation_script_dir /daisy_source_files \
   -var:installation_script_name prepare_custom_leonardo_gce_image.sh \
   -var:cis_hardening_playbook_config cis_hardening_playbook_config.yml \
   -var:cis_hardening_playbook_requirements cis_hardening_playbook_requirements.yml \
-  /daisy_source_files/leo_custom_gce_image.wf.json
+  /daisy_source_files/${WORKFLOW_FILE}
 
 # Daisy doesn't clean it up all so we remove the bucket manually
 gsutil rm -r $DAISY_BUCKET_PATH
