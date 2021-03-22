@@ -20,6 +20,8 @@ class RStudioPage(override val url: String)(implicit override val authToken: Aut
 
   val rstudioContainer: Query = cssSelector("[id='rstudio_container']")
 
+  val autoCompleteWindow: Query = cssSelector("[class*='themedPopupPanel']")
+
   override def awaitLoaded(): RStudioPage = {
     await enabled renderedApp
     this
@@ -38,6 +40,9 @@ class RStudioPage(override val url: String)(implicit override val authToken: Aut
   def variableExists(variable: String): Boolean =
     find(checkGlobalVariable(variable)).size > 0
 
+  def autoCompleteWindowOpen: Boolean =
+    find(autoCompleteWindow).size > 0
+
   // Opens an example app from the shiny package.
   // Valid examples are:
   //   "01_hello", "02_text", "03_reactivity", "04_mpg", "05_sliders", "06_tabsets",
@@ -49,8 +54,10 @@ class RStudioPage(override val url: String)(implicit override val authToken: Aut
 
       pressKeys(launchCommand)
 
-      Thread.sleep(5000)
-      await notVisible cssSelector("[class*='themedPopupPanel']")
+      if (autoCompleteWindowOpen) {
+        pressKeys(Keys.ESCAPE.toString)
+        await notVisible autoCompleteWindow
+      }
 
       pressKeys(Keys.ENTER.toString)
       await condition windowHandles.size == 2
