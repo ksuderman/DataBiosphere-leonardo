@@ -24,6 +24,8 @@ object Dependencies {
   val workbenchOpenTelemetryV = s"0.1-$workbenchLibsHash"
   val workbenchErrorReportingV = s"0.1-$workbenchLibsHash"
 
+  val workspaceManagerClientV = "0.19.0-SNAPSHOT"
+
   val helmScalaSdkV = "0.0.3"
 
   val excludeAkkaHttp = ExclusionRule(organization = "com.typesafe.akka", name = s"akka-http_${scalaV}")
@@ -98,6 +100,8 @@ object Dependencies {
   val workbenchErrorReporting: ModuleID =      "org.broadinstitute.dsde.workbench" %% "workbench-error-reporting"  % workbenchErrorReportingV
   val workbenchErrorReportingTest: ModuleID =      "org.broadinstitute.dsde.workbench" %% "workbench-error-reporting"  % workbenchErrorReportingV % Test classifier "tests"
 
+  val workspaceManagerClient: ModuleID = "bio.terra" % "workspace-manager-client" % workspaceManagerClientV
+
   val helmScalaSdk: ModuleID = "org.broadinstitute.dsp" %% "helm-scala-sdk" % helmScalaSdkV
   val helmScalaSdkTest: ModuleID = "org.broadinstitute.dsp" %% "helm-scala-sdk" % helmScalaSdkV % Test classifier "tests"
 
@@ -166,6 +170,7 @@ object Dependencies {
     mysql,
     liquibase,
     "com.github.sebruck" %% "opencensus-scala-akka-http" % "0.7.2",
+    workspaceManagerClient,
 
     // Dependent on the trace exporters you want to use add one or more of the following
     "io.opencensus" % "opencensus-exporter-trace-stackdriver" % opencensusV,
