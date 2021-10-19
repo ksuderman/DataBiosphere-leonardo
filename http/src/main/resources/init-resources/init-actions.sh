@@ -316,12 +316,6 @@ END
       cat /etc/`basename ${WELDER_DOCKER_COMPOSE}`
     fi
 
-    # Note: cryto detector should be started after user containers
-    if [ ! -z "$CRYPTO_DETECTOR_DOCKER_IMAGE" ] ; then
-      COMPOSE_FILES+=(-f /etc/`basename ${CRYPTO_DETECTOR_DOCKER_COMPOSE}`)
-      cat /etc/`basename ${CRYPTO_DETECTOR_DOCKER_COMPOSE}`
-    fi
-
     if [ ! -z ${JUPYTER_DOCKER_IMAGE} ] ; then
       COMPOSE_FILES+=(-f /etc/`basename ${JUPYTER_DOCKER_COMPOSE}`)
       cat /etc/`basename ${JUPYTER_DOCKER_COMPOSE}`
@@ -330,6 +324,12 @@ END
     if [ ! -z ${RSTUDIO_DOCKER_IMAGE} ] ; then
       COMPOSE_FILES+=(-f /etc/`basename ${RSTUDIO_DOCKER_COMPOSE}`)
       cat /etc/`basename ${RSTUDIO_DOCKER_COMPOSE}`
+    fi
+
+    # Note: cryto detector should be started after user containers
+    if [ ! -z "$CRYPTO_DETECTOR_DOCKER_IMAGE" ] ; then
+      COMPOSE_FILES+=(-f /etc/`basename ${CRYPTO_DETECTOR_DOCKER_COMPOSE}`)
+      cat /etc/`basename ${CRYPTO_DETECTOR_DOCKER_COMPOSE}`
     fi
 
     retry 5 docker-compose "${COMPOSE_FILES[@]}" config
