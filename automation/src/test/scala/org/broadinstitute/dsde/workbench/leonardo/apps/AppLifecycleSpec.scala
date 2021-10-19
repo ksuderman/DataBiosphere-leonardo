@@ -60,7 +60,7 @@ class AppLifecycleSpec
   private val appTestCases = Table(
     ("description", "createAppRequest"),
     ("create and delete a CUSTOM app", customCreateAppRequest),
-    ("create and delete a CROMWELL app", customCreateAppRequest)
+    ("create and delete a CROMWELL app", cromwellCreateAppRequest)
   )
 
   forAll(appTestCases) {
