@@ -13,7 +13,7 @@ VM_JUP_USER=jupyter
 
 sudo useradd -m -c "Jupyter User" $VM_JUP_USER
 #(echo "$VM_JUP_USER_PASSWORD"; echo "$VM_JUP_USER_PASSWORD") | sudo passwd $VM_JUP_USER
-sudo usermod -a -G $VM_JUP_USER,adm,dialout,cdrom,floppy,audio,dip,video,plugdev,lxd,netdev $VM_JUP_USER
+sudo usermod -a -G $VM_JUP_USER,adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,lxd,netdev $VM_JUP_USER
 
 ## Update apt-get
 apt-get update
