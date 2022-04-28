@@ -5,7 +5,7 @@ set -e
 # 'debconf: unable to initialize frontend: Dialog'
 export DEBIAN_FRONTEND=noninteractive
 
-VM_JUP_USER=$9
+VM_JUP_USER=jupyter
 #VM_JUP_USER_PASSWORD=$10
 
 #sudo groupadd $VM_JUP_USER
@@ -13,7 +13,7 @@ VM_JUP_USER=$9
 
 sudo useradd -m -c "Jupyter User" $VM_JUP_USER
 #(echo "$VM_JUP_USER_PASSWORD"; echo "$VM_JUP_USER_PASSWORD") | sudo passwd $VM_JUP_USER
-sudo usermod -a -G $VM_JUP_USER,adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,lxd,netdev $VM_JUP_USER
+sudo usermod -a -G $VM_JUP_USER,adm,dialout,cdrom,floppy,audio,dip,video,plugdev,lxd,netdev $VM_JUP_USER
 
 ## Update apt-get
 apt-get update
@@ -43,7 +43,7 @@ LISTENER_DOCKER_IMAGE=$8
 
 # Define environment variables for Jupyter Server customization
 
-SERVER_APP_PORT=8888
+SERVER_APP_PORT=8080
 SERVER_APP_TOKEN=''
 SERVER_APP_IP=''
 SERVER_APP_CERTFILE=''
@@ -88,14 +88,14 @@ sudo crontab -l 2>/dev/null| cat - <(echo "@reboot sudo runuser -l $VM_JUP_USER 
 
 # Login to ACR repo to pull the image for Relay Listener
 
-docker login terradevacrpublic.azurecr.io -u $DOCKER_USER_NAME -p $DOCKER_USER_PASSWORD
+#docker login terradevacrpublic.azurecr.io -u $DOCKER_USER_NAME -p $DOCKER_USER_PASSWORD
 
 #Run docker container with Relay Listener
 
-docker run -d --restart always --network host --name RelayListener \
---env LISTENER_RELAYCONNECTIONSTRING=$RELAY_CONNECTIONSTRING \
---env LISTENER_RELAYCONNECTIONNAME=$RELAY_CONNECTION_NAME \
---env LISTENER_TARGETPROPERTIES_TARGETHOST="http://${RELAY_TARGET_HOST}:8888" \
-$LISTENER_DOCKER_IMAGE
+#docker run -d --restart always --network host --name RelayListener \
+#--env LISTENER_RELAYCONNECTIONSTRING=$RELAY_CONNECTIONSTRING \
+#--env LISTENER_RELAYCONNECTIONNAME=$RELAY_CONNECTION_NAME \
+#--env LISTENER_TARGETPROPERTIES_TARGETHOST="http://${RELAY_TARGET_HOST}:8888" \
+#$LISTENER_DOCKER_IMAGE
 
 sudo shutdown -r 1
