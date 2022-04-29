@@ -98,4 +98,4 @@ docker run -d --restart always --network host --name RelayListener \
 --env LISTENER_TARGETPROPERTIES_TARGETHOST="http://${RELAY_TARGET_HOST}:8888" \
 $LISTENER_DOCKER_IMAGE
 
-sudo shutdown -r 1
+#sudo shutdown -r 1
