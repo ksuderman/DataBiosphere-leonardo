@@ -69,7 +69,11 @@ RELAY_CONNECTIONSTRING="Endpoint=sb://${RELAY_NAME}.servicebus.windows.net/;Shar
 
 # Start Jupyter server with custom parameters
 
-sudo runuser -l $VM_JUP_USER -c "/anaconda/bin/jupyter server --ServerApp.certfile=$SERVER_APP_CERTFILE --ServerApp.keyfile=$SERVER_APP_KEYFILE --ServerApp.port=$SERVER_APP_PORT --ServerApp.token=$SERVER_APP_TOKEN --ServerApp.ip=$SERVER_APP_IP --ServerApp.base_url=$SERVER_APP_BASE_URL --ServerApp.websocket_url=$SERVER_APP_WEBSOCKET_URL --ServerApp.allow_origin=$SERVER_APP_ALLOW_ORIGIN autoreload" >/dev/null 2>&1&
+JUPYTER_RUN_COMMAND="/anaconda/bin/jupyter server --ServerApp.certfile=$SERVER_APP_CERTFILE --ServerApp.keyfile=$SERVER_APP_KEYFILE --ServerApp.port=$SERVER_APP_PORT --ServerApp.token=$SERVER_APP_TOKEN --ServerApp.ip=$SERVER_APP_IP --ServerApp.base_url=$SERVER_APP_BASE_URL --ServerApp.websocket_url=$SERVER_APP_WEBSOCKET_URL --ServerApp.allow_origin=$SERVER_APP_ALLOW_ORIGIN autoreload"
+echo "RUN COMMAND\n"
+echo $JUPYTER_RUN_COMMAND
+sudo runuser -l $VM_JUP_USER -c $JUPYTER_RUN_COMMAND >/dev/null 2>&1&
+echo "END RUN COMMAND\n"
 
 # Store Jupyter Server parameters for reboot process
 
