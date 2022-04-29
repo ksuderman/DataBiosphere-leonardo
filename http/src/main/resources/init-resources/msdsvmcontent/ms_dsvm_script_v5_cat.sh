@@ -16,9 +16,9 @@ sudo useradd -m -c "Jupyter User" $VM_JUP_USER
 sudo usermod -a -G $VM_JUP_USER,adm,dialout,cdrom,floppy,audio,dip,video,plugdev,lxd,netdev $VM_JUP_USER
 
 ## Update apt-get
-apt-get update
+#apt-get update
 
-apt-get install -y --no-install-recommends apt-utils
+#apt-get install -y --no-install-recommends apt-utils
 
 sudo chgrp $VM_JUP_USER /anaconda/bin/*
 
