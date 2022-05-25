@@ -429,6 +429,10 @@ class AzurePubsubHandlerInterp[F[_]: Parallel](
               _ <- msg.diskId.traverse(diskId =>
                 dbRef.inTransaction(persistentDiskQuery.updateStatus(diskId, DiskStatus.Deleted, ctx.now))
               )
+              _ <- logger
+                .info(ctx.loggingCtx)(
+                  s"Runtime is deleted"
+                )
             } yield ()
           case WsmJobStatus.Failed =>
             F.raiseError[Unit](
