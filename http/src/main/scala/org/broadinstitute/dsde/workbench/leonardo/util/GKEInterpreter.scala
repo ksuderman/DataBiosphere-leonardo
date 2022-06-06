@@ -1066,6 +1066,7 @@ class GKEInterpreter[F[_]](
       last <- streamFUntilDone(
         config.cromwellAppConfig.services
           .map(_.name)
+          .filter(_.value == "cromwell-service")
           .traverse(s => appDao.isProxyAvailable(cluster.googleProject, appName, s)),
         config.monitorConfig.createApp.maxAttempts,
         config.monitorConfig.createApp.interval
