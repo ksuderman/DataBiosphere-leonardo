@@ -1337,6 +1337,8 @@ class GKEInterpreter[F[_]](
     val leoProxyhost = config.proxyConfig.getProxyServerHostName
     val gcsBucket = customEnvironmentVariables.getOrElse("WORKSPACE_BUCKET", "<no workspace bucket defined>")
 
+    val cbasUIProxyPath = s"/proxy/google/v1/apps/${cluster.googleProject.value}/${appName.value}/batch-analysis-ui"
+
     val rewriteTarget = "$2"
     val ingress = List(
       raw"""ingress.enabled=true""",
@@ -1347,6 +1349,7 @@ class GKEInterpreter[F[_]](
       raw"""ingress.path=${proxyPath}""",
       raw"""ingress.hosts[0].host=${k8sProxyHost}""",
       raw"""ingress.hosts[0].paths[0]=${proxyPath}${"(/|$)(.*)"}""",
+      raw"""ingress.hosts[0].paths[1]=${cbasUIProxyPath}${"(/|$)(.*)"}""",
       raw"""ingress.tls[0].secretName=tls-secret""",
       raw"""ingress.tls[0].hosts[0]=${k8sProxyHost}""",
       raw"""db.password=${config.cromwellAppConfig.dbPassword.value}"""
